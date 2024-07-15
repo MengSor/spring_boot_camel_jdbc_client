@@ -1,7 +1,9 @@
 package com.example.spring_boot_camel_jdbc_client.route;
 
+import com.example.spring_boot_camel_jdbc_client.user.User;
 import com.example.spring_boot_camel_jdbc_client.user.UserRepository;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -29,10 +31,29 @@ public class UserRoute extends RouteBuilder {
 
         rest("/users")
                 .get("/")
-                .to("direct:findUserAll");
+                .to("direct:findUserAll")
+                .get("/{id}")
+                .to("direct:findUserById")
+                .post("/")
+                .to("direct:saveUser");
 
         from("direct:findUserAll")
                 .bean(UserRepository.class , "findUserAll");
 
+        from("direct:findUserById")
+                .log("Received header: ${header.id}")
+                .bean(UserRepository.class , "findUserById(${header.id})");
+
+        from("direct:saveUser")
+                .log("Received body: ${body}")
+                .marshal().json()
+                .unmarshal(getJacksonDataFormat(User.class))
+                .bean(UserRepository.class , "saveUser(${body})");
+
+    }
+    private JacksonDataFormat getJacksonDataFormat(Class<?> unmarshalType){
+        JacksonDataFormat format = new JacksonDataFormat();
+        format.setUnmarshalType(unmarshalType);
+        return format;
     }
 }

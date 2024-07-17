@@ -28,8 +28,6 @@ public class UserResultExtractor implements ResultSetExtractor<List<UserProductD
                 userProducts.put(Id,userProductDto);
             }
             Products products = new Products();
-//            products.setId(rs.getLong("id"));
-//            products.setUserId(Id);
             products.setName(rs.getString("pro_name"));
             products.setPrice(rs.getDouble("price"));
             userProductDto.getProducts().add(products);

@@ -1,11 +1,10 @@
 package com.example.spring_boot_camel_jdbc_client.route;
 
-import com.example.spring_boot_camel_jdbc_client.user.User;
+
 import com.example.spring_boot_camel_jdbc_client.user.UserRepository;
 import com.example.spring_boot_camel_jdbc_client.user.mapper.CreateUserDto;
 import com.example.spring_boot_camel_jdbc_client.user.mapper.UpdateUserDto;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
@@ -22,13 +21,16 @@ public class UserRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
 
+        /*Your onException block in Apache Camel is designed to catch exceptions, log an error message,
+        and return a JSON response with a 404 status code. */
+
         // Global exception handling
-        onException(Exception.class)
-                .log("Error occurred: ${exception.message}")
-                .handled(true)
-                .setHeader("Content-Type", constant("application/json"))
-                .setBody(simple("{\"error\": \"${exception.message}\"}"))
-                .setHeader("CamelHttpResponseCode", constant(404));
+        onException(Exception.class) // This defines the type of exception to be caught and handled.
+                .log("Error occurred: ${exception.message}") // logs the message.
+                .handled(true) // The exception is marked as handled
+                .setHeader("Content-Type", constant("application/json")) //Sets the Content-Type header to application/json.
+                .setBody(simple("{\"error\": \"${exception.message}\"}")) //Sets the body of the response to a JSON string containing the error message.
+                .setHeader("CamelHttpResponseCode", constant(404)); //Sets the HTTP response code to 404.
 
         // REST Configuration
         restConfiguration()
@@ -62,15 +64,16 @@ public class UserRoute extends RouteBuilder {
         from("direct:findUserAll")
                 .log("Fetching all users")
                 .bean(UserRepository.class , "findUserAll")
-                .log("Fetched all users successfully");
+                .log("Fetched all users successfully")
+                .to("log:output");
 
        from("direct:findAll")
                .bean(UserRepository.class , "findAll")
-               .log("Fetched all successfully");
+               .log("Fetched all successfully")
+               .to("log:output");
 
         from("direct:findUserById")
                 .log("Received header: ${header.id}")
-                .setBody(simple("successfully"))
                 .bean(UserRepository.class , "findUserById(${header.id})")
                 .log("Fetched User with id ${header.id} successfully");
 
@@ -92,9 +95,6 @@ public class UserRoute extends RouteBuilder {
                 .log("Received header: ${header.id}")
                 .bean(UserRepository.class , "deleteUser(${header.id})")
                 .log("Deleted user with id ${header.id} successfully");
-
-//        from("timer:foo?period=5000")
-//                .to("log:output");
 
     }
 }

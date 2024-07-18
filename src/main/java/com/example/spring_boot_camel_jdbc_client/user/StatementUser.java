@@ -7,7 +7,9 @@ public enum StatementUser {
     CREATE_USER("INSERT INTO users VALUES (?,?,?)"),
     DELETE_USER("DELETE FROM users WHERE id = ?"),
     UPDATE_USER("UPDATE users SET name = ? , email = ? WHERE id = ?"),
-    ID("id");
+    ID("id"),
+    FIND_PROdUCT_ALL("SELECT * FROM products"),
+    CREATE_PRODUCT("INSERT INTO products VALUES (?,?,?,?)");
     private final String statement;
 
     StatementUser(String statement) {

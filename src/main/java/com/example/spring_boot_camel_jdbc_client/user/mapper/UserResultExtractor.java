@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+ /*Your UserResultExtractor class implements ResultSetExtractor to convert a ResultSet into a list of UserProductDto objects.*/
+
 public class UserResultExtractor implements ResultSetExtractor<List<UserProductDto>> {
     @Override
     public List<UserProductDto> extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -32,6 +34,6 @@ public class UserResultExtractor implements ResultSetExtractor<List<UserProductD
             products.setPrice(rs.getDouble("price"));
             userProductDto.getProducts().add(products);
         }
-        return new ArrayList<>(userProducts.values());
+        return new ArrayList<>(userProducts.values()); // Convert userProducts.values() to a List<UserProductDto> Return the list
     }
 }

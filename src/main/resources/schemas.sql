@@ -18,4 +18,4 @@ create table if not exists orders (
     id SERIAL primary key ,
     buy varchar (255) not null
 );
-insert into orders values ('2','process');
+insert into orders values ('4','process');

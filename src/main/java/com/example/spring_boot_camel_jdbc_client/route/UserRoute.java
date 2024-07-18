@@ -1,9 +1,13 @@
 package com.example.spring_boot_camel_jdbc_client.route;
 
 
+import com.example.spring_boot_camel_jdbc_client.product.ProductRepository;
+import com.example.spring_boot_camel_jdbc_client.product.Products;
+import com.example.spring_boot_camel_jdbc_client.product.mapper.CreateProductDto;
 import com.example.spring_boot_camel_jdbc_client.user.UserRepository;
 import com.example.spring_boot_camel_jdbc_client.user.mapper.CreateUserDto;
 import com.example.spring_boot_camel_jdbc_client.user.mapper.UpdateUserDto;
+import net.sf.jsqlparser.statement.create.procedure.CreateProcedure;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.core.env.Environment;
@@ -34,13 +38,7 @@ public class UserRoute extends RouteBuilder {
 
         // REST Configuration
         restConfiguration()
-                .contextPath(env.getProperty("camel.servlet.mapping.context-path", "/rest/*"))
-                .apiContextPath("/api-doc")
-                .apiProperty("api.title", "Customer API")
-                .apiProperty("api.version", "1.0")
-                .apiProperty("cors", "true")
-                .apiContextRouteId("doc-api")
-                .port(env.getProperty("server.port" , "8090"))
+                .component("servlet")
                 .bindingMode(RestBindingMode.json);
 
         // REST Endpoints
@@ -58,7 +56,13 @@ public class UserRoute extends RouteBuilder {
                 .put("/{id}")
                 .to("direct:updateUser")
                 .delete("/{id}")
-                .to("direct:deleteUser");
+                .to("direct:deleteUser")
+//                Get Products
+                .get("/products")
+                .to("direct:findProducts")
+                .post("/products")
+                .to("direct:saveProduct");
+
 
         // Route Definitions
         from("direct:findUserAll")
@@ -75,7 +79,8 @@ public class UserRoute extends RouteBuilder {
         from("direct:findUserById")
                 .log("Received header: ${header.id}")
                 .bean(UserRepository.class , "findUserById(${header.id})")
-                .log("Fetched User with id ${header.id} successfully");
+                .log("Fetched User with id ${header.id} successfully")
+                .to("log:output");
 
         from("direct:saveUser")
                 .log("Received body: ${body}")
@@ -95,6 +100,16 @@ public class UserRoute extends RouteBuilder {
                 .log("Received header: ${header.id}")
                 .bean(UserRepository.class , "deleteUser(${header.id})")
                 .log("Deleted user with id ${header.id} successfully");
+
+        from("direct:findProducts")
+                .bean(ProductRepository.class , "findProducts");
+
+        from("direct:saveProduct")
+                .log("Received body: ${body}")
+                .marshal().json()
+                .unmarshal().json(CreateProductDto.class)
+                .bean(ProductRepository.class , "saveProduct(${body})")
+                .log("Created a new user successfully");
 
     }
 }

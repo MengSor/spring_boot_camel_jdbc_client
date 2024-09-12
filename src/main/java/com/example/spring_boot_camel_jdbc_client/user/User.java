@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Table(name = "users")
 public class User {
+//    private static final long serialVersionUID = -5196571557625798306L;
     private String id;
     private String name;
     private String email;

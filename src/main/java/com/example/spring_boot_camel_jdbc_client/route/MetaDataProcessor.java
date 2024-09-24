@@ -54,7 +54,7 @@ public class MetaDataProcessor {
         BeanResponse<?> response;
         if(!users.isEmpty()){
 //            logger.info("User cache table process successfully");
-            deleteProducts(Arrays.asList());
+//            deleteProducts(Arrays.asList());
             response = BeanResponse.builder().data(users).massage("success").success(true).code(HttpStatus.OK.value()).build();
             logger.info("Body content ##: {}", response);
             logger.info("Interface configuration updated successfully");
@@ -70,12 +70,12 @@ public class MetaDataProcessor {
             userRepository.deleteUser(user.getId());
         }
     }
-    private void deleteProducts(List<CreateProductDto> productDtos) {
-        logger.info("{}",productDtos);
-        for (CreateProductDto productDto : productDtos){
-            productRepository.deleteProduct(productDto.userid());
-        }
-    }
+//    private void deleteProducts(List<CreateProductDto> productDtos) {
+//        logger.info("{}",productDtos);
+//        for (CreateProductDto productDto : productDtos){
+//            productRepository.deleteProduct(productDto.userid());
+//        }
+//    }
 
     public void deleteDetail(List<User> users){
        for (User user : users) {

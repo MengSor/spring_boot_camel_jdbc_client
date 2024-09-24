@@ -118,10 +118,10 @@ public class UserRoute extends RouteBuilder {
                 .log("Fetched all users successfully")
                 .to("log:output");
 
-       from("direct:findAll")
-//               .bean(UserRepository.class , "findAll")
-               .log("Fetched all successfully")
-               .to("controller","findUserAll");
+//       from("direct:findAll")
+////               .bean(UserRepository.class , "findAll")
+//               .log("Fetched all successfully")
+//               .to("controller","findUserAll");
 
         from("direct:findUserById")
 //                .log("Received header: ${header.id}")

@@ -6,11 +6,11 @@ create table users(
 insert into users values ('1','Dara','Dara@.com');
 
 create table products(
-                      pro_id SERIAL primary key ,
-                      userId INTEGER not null ,
+                      pro_id varchar(225) primary key ,
+                      userId varchar(225) not null ,
                       pro_name varchar(255) not null ,
                       price double precision not null,
-    foreign key (userId) references users (id)
+    foreign key (userId) references users (id) ON DELETE CASCADE
 );
 insert into products (pro_id,userId,pro_name,price) values (4,2 , 'Java' , '23');
 

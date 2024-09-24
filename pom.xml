@@ -61,6 +61,7 @@
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-core-starter</artifactId>
+<<<<<<< HEAD
             <version>${camel.version}</version>
         </dependency>
         <dependency>
@@ -84,6 +85,21 @@
 <!--            <artifactId>camel-log-starter</artifactId>-->
 <!--            <version>4.0.0</version>-->
 <!--        </dependency>-->
+=======
+            <version>4.0.0</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.apache.camel.springboot</groupId>-->
+<!--            <artifactId>camel-swagger-java-starter</artifactId>-->
+<!--            <version>3.22.2</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-log-starter</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
 
         <!--   Add Camel    -->
 

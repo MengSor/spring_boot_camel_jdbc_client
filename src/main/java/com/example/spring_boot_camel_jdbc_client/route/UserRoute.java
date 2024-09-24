@@ -1,5 +1,6 @@
 package com.example.spring_boot_camel_jdbc_client.route;
 
+<<<<<<< HEAD
 /*
    We configure the restConfiguration to use the servlet component.
    We define a REST endpoint /api/hello that directs to a route direct:hello.
@@ -20,6 +21,19 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
+=======
+
+import com.example.spring_boot_camel_jdbc_client.product.ProductRepository;
+import com.example.spring_boot_camel_jdbc_client.product.Products;
+import com.example.spring_boot_camel_jdbc_client.product.mapper.CreateProductDto;
+import com.example.spring_boot_camel_jdbc_client.user.UserRepository;
+import com.example.spring_boot_camel_jdbc_client.user.mapper.CreateUserDto;
+import com.example.spring_boot_camel_jdbc_client.user.mapper.UpdateUserDto;
+import net.sf.jsqlparser.statement.create.procedure.CreateProcedure;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.rest.RestBindingMode;
+import org.springframework.core.env.Environment;
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +54,7 @@ public class UserRoute extends RouteBuilder {
                 .setBody(simple("{\"error\": \"${exception.message}\"}")) //Sets the body of the response to a JSON string containing the error message.
                 .setHeader("CamelHttpResponseCode", constant(404)); //Sets the HTTP response code to 404.
 
+<<<<<<< HEAD
 //        onException(Exception.class)
 //                .log("This is error message: ${exception}");
         //    OpenAPI
@@ -61,6 +76,11 @@ public class UserRoute extends RouteBuilder {
                 .apiProperty("base.path", "/api")
                 .apiProperty("cors", "true")
                 .apiProperty("openapi", openAPI.toString())
+=======
+        // REST Configuration
+        restConfiguration()
+                .component("servlet")
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
                 .bindingMode(RestBindingMode.json);
 
         // REST Endpoints
@@ -68,13 +88,17 @@ public class UserRoute extends RouteBuilder {
                 .consumes(MediaType.APPLICATION_JSON_VALUE)
                 .produces(MediaType.APPLICATION_JSON_VALUE)
                 .get("/")
+<<<<<<< HEAD
                 .routeId("Get")
                 .description("Returns a greeting message")
                 .outType(User.class)
+=======
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
                 .to("direct:findUserAll")
                 .get("/all")
                 .to("direct:findAll")
                 .get("/{id}")
+<<<<<<< HEAD
                 .routeId("Get By ID")
                 .description("Returns By ID a greeting message")
                 .outType(String.class)
@@ -83,11 +107,16 @@ public class UserRoute extends RouteBuilder {
                 .routeId("Post")
                 .description("Input a greeting message")
                 .outType(Integer.class)
+=======
+                .to("direct:findUserById")
+                .post("/")
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
                 .to("direct:saveUser")
                 .put("/{id}")
                 .to("direct:updateUser")
                 .delete("/{id}")
                 .to("direct:deleteUser")
+<<<<<<< HEAD
                 //  Get Products
                 .get("/products")
                 .to("direct:findProducts")
@@ -108,16 +137,28 @@ public class UserRoute extends RouteBuilder {
                 .to("direct:updateOrder")
                 .delete("/orders/{id}")
                 .to("direct:deleteOrder");
+=======
+//                Get Products
+                .get("/products")
+                .to("direct:findProducts")
+                .post("/products")
+                .to("direct:saveProduct");
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
 
 
         // Route Definitions
         from("direct:findUserAll")
+<<<<<<< HEAD
 //                .onCompletion()
                 .log( "Fetching all users")
+=======
+                .log("Fetching all users")
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
                 .bean(UserRepository.class , "findUserAll")
                 .log("Fetched all users successfully")
                 .to("log:output");
 
+<<<<<<< HEAD
 //       from("direct:findAll")
 ////               .bean(UserRepository.class , "findAll")
 //               .log("Fetched all successfully")
@@ -136,11 +177,27 @@ public class UserRoute extends RouteBuilder {
                 .to("jms:queue:errorQueue")
                 .doFinally()
                 .log("Successfully");
+=======
+       from("direct:findAll")
+               .bean(UserRepository.class , "findAll")
+               .log("Fetched all successfully")
+               .to("log:output");
+
+        from("direct:findUserById")
+                .log("Received header: ${header.id}")
+                .bean(UserRepository.class , "findUserById(${header.id})")
+                .log("Fetched User with id ${header.id} successfully")
+                .to("log:output");
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
 
         from("direct:saveUser")
                 .log("Received body: ${body}")
                 .marshal().json()
+<<<<<<< HEAD
                 .unmarshal().json(User.class)
+=======
+                .unmarshal().json(CreateUserDto.class)
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
                 .bean(UserRepository.class , "saveUser(${body})")
                 .log("Created a new user successfully");
 
@@ -153,6 +210,7 @@ public class UserRoute extends RouteBuilder {
 
         from("direct:deleteUser")
                 .log("Received header: ${header.id}")
+<<<<<<< HEAD
                 .bean(UserController.class , "getUserAll(${header.id})")
                 .log("Deleted user with id ${header.id} successfully");
 
@@ -163,12 +221,21 @@ public class UserRoute extends RouteBuilder {
         from("direct:findById")
                 .bean(ProductRepository.class , "findById(${header.id})");
 
+=======
+                .bean(UserRepository.class , "deleteUser(${header.id})")
+                .log("Deleted user with id ${header.id} successfully");
+
+        from("direct:findProducts")
+                .bean(ProductRepository.class , "findProducts");
+
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
         from("direct:saveProduct")
                 .log("Received body: ${body}")
                 .marshal().json()
                 .unmarshal().json(CreateProductDto.class)
                 .bean(ProductRepository.class , "saveProduct(${body})")
                 .log("Created a new user successfully");
+<<<<<<< HEAD
 
         from("direct:updateProduct")
                 .log("Received header: ${body}, ${header.id}")
@@ -201,6 +268,8 @@ public class UserRoute extends RouteBuilder {
         from("direct:deleteOrder")
                 .log("Received header : ${header.id}")
                 .bean(OrderRepository.class , "deleteOrder(${header.id})");
+=======
+>>>>>>> bfa91f78b39852771aef21e2b289256caef1a25a
 
     }
 }

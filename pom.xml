@@ -50,7 +50,7 @@
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
             <artifactId>camel-servlet-starter</artifactId>
-            <version>4.0.0</version>
+            <version>${camel.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.camel.springboot</groupId>
@@ -60,7 +60,9 @@
 <!--        <dependency>-->
 <!--            <groupId>org.apache.camel.springboot</groupId>-->
 <!--            <artifactId>camel-swagger-java-starter</artifactId>-->
+<!--            <version>3.22.2</version>-->
 <!--        </dependency>-->
+
 
 
 
@@ -104,6 +106,10 @@
                         <exclude>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+<!--                            <configuration>-->
+<!--                                                   <source>${java.version}</source>-->
+<!--                                                    <target>${java.version}</target>-->
+<!--                            </configuration>-->
                         </exclude>
                     </excludes>
                 </configuration>

@@ -14,4 +14,5 @@ public class Products {
     private Double price;
     private String description;
     private String image;
+    private String category;
 }

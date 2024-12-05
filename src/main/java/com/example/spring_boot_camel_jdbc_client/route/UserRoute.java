@@ -39,6 +39,7 @@ public class UserRoute extends RouteBuilder {
         // REST Configuration
         restConfiguration()
                 .component("servlet")
+                .contextPath("/application/*")
                 .bindingMode(RestBindingMode.json);
 
         // REST Endpoints
@@ -80,6 +81,7 @@ public class UserRoute extends RouteBuilder {
                 .log("Received header: ${header.id}")
                 .bean(UserRepository.class , "findUserById(${header.id})")
                 .log("Fetched User with id ${header.id} successfully")
+
                 .to("log:output");
 
         from("direct:saveUser")
@@ -87,6 +89,7 @@ public class UserRoute extends RouteBuilder {
                 .marshal().json()
                 .unmarshal().json(CreateUserDto.class)
                 .bean(UserRepository.class , "saveUser(${body})")
+                .log("Header->>>> ${headers}"   )
                 .log("Created a new user successfully");
 
         from("direct:updateUser")
